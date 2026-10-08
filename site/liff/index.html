@@ -200,6 +200,12 @@
         card = buildCard(brief, BASE, { forwardUrl: `https://liff.line.me/${config.liffId}?date=${brief.date}` });
         renderPreview(card);
 
+        if (brief.withdrawn) {
+          $('preview').innerHTML = '<div class="placeholder">這份晨報已撤回，無法再分享。</div>';
+          setStatus('這份晨報已撤回', 'err');
+          return;
+        }
+
         if (!liff.isApiAvailable('shareTargetPicker')) {
           setStatus('這個環境不能分享：請在 LINE App 裡開啟，並確認後台已開啟 shareTargetPicker', 'err');
           return;

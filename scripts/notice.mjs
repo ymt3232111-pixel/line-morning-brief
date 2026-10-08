@@ -1,0 +1,38 @@
+// 撤回後，晨報網頁換成這個提示頁
+export function noticePage(date, { logo } = {}) {
+  const d = date.replace(/-/g, '/');
+  return `<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>本期晨報已撤回</title>
+<style>
+  :root { --bg:#f3f5f8; --paper:#fff; --ink:#18202b; --muted:#5b6676; --navy:#0f2a4a; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0d131b; --paper:#141c26; --ink:#e4e9f0; --muted:#97a3b3; } }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 16px;
+    background:var(--bg); color:var(--ink); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; }
+  .card { width:100%; max-width:420px; background:var(--paper); border-radius:14px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+  .brand { background:#fff; padding:12px 16px; border-bottom:1px solid #dfe4ea; }
+  .brand img { height:40px; display:block; }
+  .bar { background:var(--navy); color:#fff; padding:18px 16px; font-weight:700; font-size:18px; }
+  .body { padding:18px 16px 22px; line-height:1.7; font-size:15px; }
+  .body p { margin:0 0 6px; }
+  .muted { color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    ${logo ? `<div class="brand"><img src="${logo}" alt="富盛證券投資顧問股份有限公司"></div>` : ''}
+    <div class="bar">本期晨報已撤回</div>
+    <div class="body">
+      <p>${d} 的全球股債匯行情快搜已撤回，內容不再提供。</p>
+      <p class="muted">如有需要，請洽您的業務窗口。</p>
+    </div>
+  </div>
+</body>
+</html>
+`;
+}

@@ -21,6 +21,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { noticePage } from './notice.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BRIEFS = path.join(ROOT, 'briefs');
@@ -173,6 +174,16 @@ async function main() {
       logo = { path: `b/${summary.logo.src.replace(/^\.?\//, '')}`, w: summary.logo.w, h: summary.logo.h };
     }
     delete summary.logo;
+
+    // 已撤回的日期：網頁維持「已撤回」提示，不會因為重跑又被放回去
+    let withdrawn = false;
+    try {
+      withdrawn = JSON.parse(await fs.readFile(path.join(ROOT, 'withdrawn.json'), 'utf8')).includes(date);
+    } catch {}
+    if (withdrawn) {
+      await fs.writeFile(path.join(PAGE_DIR, `${date}.html`),
+        noticePage(date, { logo: logo ? logo.path.replace(/^b\//, '') : null }));
+    }
     let labels = await listPanels(page);
     const hasPanels = labels.length > 0;
     if (!hasPanels) labels = [''];
@@ -244,6 +255,7 @@ async function main() {
       date, title, width, images,
       image: images[0].image, preview: images[0].preview, cover,
       page: `b/${date}.html`, logo, summary,
+      ...(withdrawn ? { withdrawn: true } : {}),
       generatedAt: new Date().toISOString(),
     };
     const json = JSON.stringify(info, null, 2) + '\n';

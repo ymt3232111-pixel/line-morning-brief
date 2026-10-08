@@ -43,6 +43,7 @@ function teaser(brief) {
  * @param brief  latest.json / brief/DATE.json 的內容
  * @param base   網站根目錄網址，例如 https://xxx.github.io/line-morning-brief
  * @param opts.shareUrl    給自己的提醒用：最上面放「分享到銀行群組」
+ * @param opts.withdrawUrl 給自己的提醒用：撤回晨報的連結
  * @param opts.forwardUrl  給群組用：放「轉傳給其他人」，收到的人也能再分享
  */
 export function buildCard(brief, base, opts = {}) {
@@ -69,6 +70,10 @@ export function buildCard(brief, base, opts = {}) {
   footer.push({ type: 'button', style: opts.shareUrl ? 'secondary' : 'primary',
     color: opts.shareUrl ? undefined : C.green, height: 'sm',
     action: { type: 'uri', label: '開啟今日晨報', uri: pageUrl } });
+  if (opts.withdrawUrl) {
+    footer.push({ type: 'button', style: 'link', height: 'sm', color: '#C62828',
+      action: { type: 'uri', label: '發錯了？撤回這份晨報', uri: opts.withdrawUrl } });
+  }
   if (opts.forwardUrl) {
     footer.push({ type: 'button', style: 'link', height: 'sm', color: C.green,
       action: { type: 'uri', label: '轉傳給其他人', uri: opts.forwardUrl } });

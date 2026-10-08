@@ -1,0 +1,60 @@
+# 撤回／恢復某一天的晨報
+# 撤回後：卡片上的「開啟今日晨報」會顯示「本期晨報已撤回」，「轉傳給其他人」也會停止分享。
+# 已送出的 LINE 卡片本身無法從對方手機刪除，但點進去就看不到內容了。
+name: 撤回晨報
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: '要做什麼'
+        type: choice
+        options: ['撤回', '恢復']
+        default: '撤回'
+      date:
+        description: '日期 YYYY-MM-DD（留空 = 今天）'
+        required: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-brief
+  cancel-in-progress: false
+
+jobs:
+  withdraw:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: ${{ inputs.action }}晨報
+        run: node scripts/withdraw.mjs "${{ inputs.action }}" "${{ inputs.date }}"
+
+      - name: 存回 repo
+        run: |
+          git config user.name "brief-bot"
+          git config user.email "brief-bot@users.noreply.github.com"
+          git add site withdrawn.json
+          git diff --cached --quiet || git commit -m "${{ inputs.action }}: ${{ inputs.date || 'today' }}"
+          git pull --rebase -X theirs --autostash
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: 部署到 GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

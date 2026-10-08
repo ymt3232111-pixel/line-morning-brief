@@ -56,7 +56,9 @@ async function main() {
     await waitOnline(`${SITE_URL}/${p}`);
   }
 
-  const message = buildCard(info, SITE_URL, { shareUrl: liffUrl });
+  const repo = process.env.GITHUB_REPOSITORY;
+  const withdrawUrl = repo ? `https://github.com/${repo}/actions/workflows/withdraw.yml` : undefined;
+  const message = buildCard(info, SITE_URL, { shareUrl: liffUrl, withdrawUrl });
   message.altText = `📊 ${info.title} 已完成，點此分享到群組`;
 
   const res = await fetch('https://api.line.me/v2/bot/message/push', {
