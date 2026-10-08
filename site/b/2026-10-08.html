@@ -3,33 +3,29 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
 <style>
-/* Layout: white brand bar → navy masthead band → tab bar → one wide data sheet per tab; tables scroll sideways with a pinned name column */
+/* Layout: navy masthead band → tab bar → one wide data sheet per tab; tables scroll sideways with a pinned name column */
 :root{
   --bg:#f3f5f8; --paper:#ffffff; --ink:#18202b; --muted:#5b6676; --line:#dfe4ea; --zebra:#f6f8fa;
   --navy:#0f2a4a; --navy-ink:#ffffff; --navy-sub:#b9c8dc;
-  --green:#1f6b4f; --green-ink:#ffffff; --green-soft:#e6f2ec; --lab-ink:#1f6b4f;
-  --up:#c62828; --dn:#1b7a3d; --flat:#5b6676; --na:#9aa3ae; --link:#16467a; --tag-bg:#fdecea; --tag-ink:#a12a20;
-  --brand-bg:#ffffff;
+  --green:#1f6b4f; --green-ink:#ffffff; --green-soft:#e6f2ec;
+  --up:#c62828; --dn:#1b7a3d; --flat:#5b6676; --na:#9aa3ae; --link:#16467a; --tag-bg:#fdecea; --tag-ink:#a12a20; --brand-bg:#ffffff;
   --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
   --font-num:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0d131b; --paper:#141c26; --ink:#e4e9f0; --muted:#97a3b3; --line:#263242; --zebra:#18222e;
   --navy:#0b2340; --navy-ink:#f2f6fb; --navy-sub:#9fb3cc;
-  --green:#1d5c45; --green-ink:#eaf6f0; --green-soft:#16302a; --lab-ink:#eaf6f0;
+  --green:#1d5c45; --green-ink:#eaf6f0; --green-soft:#16302a;
   --up:#ff6b6b; --dn:#4cc77d; --flat:#97a3b3; --na:#5d6876; --link:#8cbcf2; --tag-bg:#3a1f1f; --tag-ink:#ff9b91; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0d131b; --paper:#141c26; --ink:#e4e9f0; --muted:#97a3b3; --line:#263242; --zebra:#18222e;
   --navy:#0b2340; --navy-ink:#f2f6fb; --navy-sub:#9fb3cc;
-  --green:#1d5c45; --green-ink:#eaf6f0; --green-soft:#16302a; --lab-ink:#eaf6f0;
+  --green:#1d5c45; --green-ink:#eaf6f0; --green-soft:#16302a;
   --up:#ff6b6b; --dn:#4cc77d; --flat:#97a3b3; --na:#5d6876; --link:#8cbcf2; --tag-bg:#3a1f1f; --tag-ink:#ff9b91; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.6;margin:0}
 a{color:var(--link)}
 a:focus-visible,button:focus-visible{outline:2px solid var(--link);outline-offset:2px}
-.brand{background:var(--brand-bg);border-bottom:1px solid var(--line);padding:10px 16px}
-.brand .wrap{padding-inline:0;display:flex;align-items:center}
-.brand img{height:52px;width:auto;display:block}
 .mast{background:var(--navy);color:var(--navy-ink);padding:20px 16px 18px}
 .wrap{max-width:1180px;margin:0 auto;padding-inline:16px}
 .mast .wrap{padding-inline:0}
@@ -39,10 +35,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--link);outline-offse
 .tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
 .tabs .wrap{display:flex;gap:4px}
 .tabs button{appearance:none;border:0;background:none;color:var(--muted);font:inherit;font-weight:700;font-size:15px;padding:12px 16px;cursor:pointer;border-bottom:3px solid transparent}
-.tabs button[aria-selected="true"]{color:var(--lab-ink);border-bottom-color:var(--green)}
+.tabs button[aria-selected="true"]{color:var(--green);border-bottom-color:var(--green)}
 main{padding-block:20px 8px}
 section.panel{display:flex;flex-direction:column;gap:22px}
-section.panel>div{min-width:0}
 h2{font-size:17px;margin:0 0 8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 h2 small{font-size:12px;font-weight:400;color:var(--muted)}
 .scroll{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:6px}
@@ -62,12 +57,17 @@ td.up{color:var(--up)} td.dn{color:var(--dn)} td.flat{color:var(--flat)} td.na{c
 .legend .u{color:var(--up);font-weight:700}.legend .d{color:var(--dn);font-weight:700}
 .news{display:grid;gap:14px}
 article{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 16px;min-width:0}
-article .lab{display:inline-block;font-size:12px;font-weight:700;background:var(--green-soft);color:var(--lab-ink);padding:1px 8px;border-radius:3px}
+article .lab{display:inline-block;font-size:12px;font-weight:700;background:var(--green-soft);color:var(--green);padding:1px 8px;border-radius:3px}
+:root[data-theme="dark"] article .lab{color:var(--green-ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) article .lab{color:var(--green-ink)}}
 article .time{font-size:12px;color:var(--muted);margin-left:8px;font-family:var(--font-num)}
 article h3{font-size:16px;margin:8px 0 6px;text-wrap:balance;line-height:1.45}
 article p{margin:0 0 8px;max-width:72ch}
 article .src{font-size:13px}
 .window{background:var(--green-soft);border-radius:6px;padding:10px 14px;font-size:13px}
+.brand{background:var(--brand-bg);border-bottom:1px solid var(--line);padding:10px 16px}
+.brand .wrap{padding-inline:0;display:flex;align-items:center}
+.brand img{height:52px;width:auto;display:block}
 footer{border-top:1px solid var(--line);margin-top:24px;padding-block:16px 28px;font-size:11.5px;line-height:1.75;color:var(--muted)}
 footer p{margin:0;max-width:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -77,7 +77,7 @@ footer p{margin:0;max-width:none}
 <header class="mast">
   <div class="wrap">
     <h1>2026年10月8日 全球股債匯行情快搜</h1>
-    <p>數據收盤日:<b>2026/10/7(三)</b> 各市場收盤(休市:滬深300 為 9/30 收盤) · 新聞範圍:<b>10/7 10:30 – 10/8 08:15</b>(台北時間)</p>
+    <p>數據收盤日:<b>2026/10/7(三)</b> 各市場收盤(休市:滬深300 為 9/30 收盤)· 新聞範圍:<b>10/7 10:30 – 10/8 08:15</b>(台北時間)</p>
   </div>
 </header>
 
@@ -90,7 +90,7 @@ footer p{margin:0;max-width:none}
 
 <main class="wrap">
 <section class="panel" id="p-mkt" role="tabpanel" aria-labelledby="tab-mkt">
-  <div class="legend"><span>漲跌幅單位 %;殖利率變動單位 bp</span><span><span class="u">紅</span>=上漲 <span class="d">綠</span>=下跌</span><span>點擊名稱可開啟 Investing.com 歷史報價</span></div>
+  <div class="legend"><span>漲跌幅單位 %;殖利率變動單位 bp</span><span><span class="u">紅</span>=上漲 <span class="d">綠</span>=下跌</span><span>點擊名稱可開啟歷史報價</span></div>
 
   <div>
     <h2>股市</h2>
@@ -117,8 +117,8 @@ footer p{margin:0;max-width:none}
   </div>
 
   <div>
-    <h2>美銀美林(ICE BofA)債券指數報酬 % <small>總報酬指數,資料日 2026/10/7</small></h2>
-    <div class="scroll"><table>
+    <h2>美銀美林(ICE BofA)債券指數報酬 % <small>資料日 2026/10/7</small></h2>
+    <div class="scroll"><table style="min-width:860px">
       <thead><tr><th>指數</th><th>近1日</th><th>本月迄今</th><th>本季迄今</th><th>年初迄今</th><th>近1年</th><th>近3年年化</th><th>近5年年化</th><th>近10年年化</th></tr></thead>
       <tbody><tr><th scope="row">美國公債</th><td class="up">+0.01</td><td class="up">+0.08</td><td class="up">+0.08</td><td class="dn">-2.65</td><td class="dn">-2.09</td><td class="up">+3.57</td><td class="dn">-1.10</td><td class="up">+0.52</td></tr><tr><th scope="row">美國MBS</th><td class="dn">-0.13</td><td class="dn">-0.01</td><td class="dn">-0.01</td><td class="dn">-3.03</td><td class="dn">-1.83</td><td class="up">+4.98</td><td class="dn">-0.36</td><td class="up">+0.90</td></tr><tr><th scope="row"><a href="https://fred.stlouisfed.org/series/BAMLCC0A0CMTRIV" target="_blank" rel="noopener">美國投資級債</a></th><td class="up">+0.02</td><td class="up">+0.20</td><td class="up">+0.20</td><td class="dn">-2.59</td><td class="dn">-2.10</td><td class="up">+5.71</td><td class="dn">-0.12</td><td class="up">+2.17</td></tr><tr><th scope="row">歐洲投資級債</th><td class="dn">-0.03</td><td class="up">+0.32</td><td class="up">+0.32</td><td class="dn">-0.93</td><td class="dn">-0.81</td><td class="up">+4.22</td><td class="dn">-0.26</td><td class="up">+0.66</td></tr><tr><th scope="row"><a href="https://fred.stlouisfed.org/series/BAMLHYH0A0HYM2TRIV" target="_blank" rel="noopener">美國非投資級債</a></th><td class="dn">-0.14</td><td class="up">+0.21</td><td class="up">+0.21</td><td class="up">+0.25</td><td class="up">+1.48</td><td class="up">+8.49</td><td class="up">+3.64</td><td class="up">+4.94</td></tr><tr><th scope="row"><a href="https://fred.stlouisfed.org/series/BAMLHE00EHYITRIV" target="_blank" rel="noopener">歐洲非投資級債</a></th><td class="dn">-0.15</td><td class="dn">-0.28</td><td class="dn">-0.28</td><td class="dn">-0.21</td><td class="up">+0.37</td><td class="up">+6.61</td><td class="up">+2.50</td><td class="up">+3.44</td></tr><tr><th scope="row">新興市場本地債</th><td class="dn">-0.24</td><td class="up">+0.24</td><td class="up">+0.24</td><td class="up">+0.46</td><td class="up">+3.27</td><td class="up">+7.96</td><td class="up">+2.13</td><td class="up">+2.69</td></tr><tr><th scope="row">新興市場主權債</th><td class="dn">-0.36</td><td class="dn">-0.20</td><td class="dn">-0.20</td><td class="dn">-2.95</td><td class="dn">-0.44</td><td class="up">+9.12</td><td class="up">+0.74</td><td class="up">+2.01</td></tr><tr><th scope="row"><a href="https://fred.stlouisfed.org/series/BAMLEMCBPITRIV" target="_blank" rel="noopener">新興市場公司債</a></th><td class="dn">-0.10</td><td class="dn">-0.04</td><td class="dn">-0.04</td><td class="dn">-1.32</td><td class="dn">-0.34</td><td class="up">+7.15</td><td class="up">+0.92</td><td class="up">+2.66</td></tr></tbody>
     </table></div>
@@ -129,33 +129,33 @@ footer p{margin:0;max-width:none}
   <div class="window">本期新聞時間範圍:2026年10月7日 10:30 至 10月8日 08:15(台北時間)。各則標示之時間為台北時間的發布時間。</div>
   <div class="news">
     <article>
-      <span class="lab">美國</span><span class="time">10/8 02:20</span>
-      <h3>Fed 9月會議紀錄:多數官員估年底前還要再升息一次,10月未必出手</h3>
-      <p>聯準會9月會議全票通過升息1碼,聯邦基金利率目標區間升至3.75%至4%,為2023年7月以來首度升息。會議紀錄顯示,提交預測的18位官員中有16位預期年底前會再升息一次。期貨市場對10月27至28日會議升息的押注降至約兩成,較9月決策後的約七成大幅回落,市場較傾向12月行動。10月14日公布的CPI將是下一個關鍵數據。</p>
-      <p class="src">鉅亨網 · <a href="https://news.cnyes.com/news/id/6624319" target="_blank" rel="noopener">閱讀原文</a></p>
-    </article>
-    <article>
-      <span class="lab">美國債市</span><span class="time">10/7 20:45</span>
-      <h3>10年期美債殖利率盤中觸及24年高點,390億美元標售需求強勁</h3>
-      <p>10年期美債殖利率盤中一度升至約5.36%,為2002年以來最高,自7月底以來累計上升約60個基點。當天390億美元10年期公債標售得標殖利率5.3%,投標倍數2.77倍為2016年以來最高,間接投標比重80.3%、非交易商合計吸收97.5%。標售後10年期殖利率回落至約5.28%。財政部週四將標售220億美元30年期公債,並回購至少40億美元的20至30年期公債。</p>
+      <span class="lab">美國</span><span class="time">10/7 20:45</span>
+      <h3>10年期美債殖利率觸24年高點後,390億美元標售需求強勁</h3>
+      <p>10年期美債殖利率7日盤中上升近8個基點至5.35%,為2002年以來最高;30年期升至5.724%,2年期升至4.818%。財政部當天標售390億美元10年期公債,得標殖利率5.3%,投標倍數2.77倍,間接投標人取得80.3%,標售後10年期殖利率回落至約5.28%。歐洲債市同步走高,法國10年期殖利率升至4.876%、英國同天期升至5.447%。財政部週四將續標220億美元30年期公債。</p>
       <p class="src">鉅亨網 · <a href="https://news.cnyes.com/news/id/6624017" target="_blank" rel="noopener">閱讀原文</a></p>
     </article>
     <article>
-      <span class="lab">美國</span><span class="time">10/8 00:50</span>
-      <h3>紐約Fed調查:9月一年期通膨預期升至3.9%,創2023年5月以來新高</h3>
-      <p>紐約聯準會9月消費者預期調查顯示,未來一年通膨預期由8月的3.6%升至3.9%;三年期預期中位數升至3.3%,五年期持平於3%。受訪家庭預期未來一年支出成長5.5%,同樣為2023年5月以來最高,高於收入成長預期的2.6%。約42%受訪家庭認為財務狀況較一年前變差,已連續兩個月惡化。</p>
-      <p class="src">鉅亨網 · <a href="https://news.cnyes.com/news/id/6624318" target="_blank" rel="noopener">閱讀原文</a></p>
+      <span class="lab">美國</span><span class="time">10/8 02:20</span>
+      <h3>聯準會9月會議紀錄:多數官員預期年底前再升息一次</h3>
+      <p>聯準會9月會議全票通過升息1碼,聯邦資金利率目標區間升至3.75%至4%,為2023年7月以來首次升息。紀錄顯示,提交預測的18名官員中有16人預期年底前還會再升息一次,但10月是否行動仍未定。聯邦資金期貨顯示10月再升息機率約兩成。市場接下來將關注10月14日公布的CPI。</p>
+      <p class="src">鉅亨網 · <a href="https://news.cnyes.com/news/id/6624319" target="_blank" rel="noopener">閱讀原文</a></p>
     </article>
     <article>
-      <span class="lab">美國</span><span class="time">10/8 06:40</span>
-      <h3>美債殖利率高檔、Fed偏鷹,美股四大指數同步收低</h3>
-      <p>10月7日道瓊下跌341.41點(-0.7%)收51,179.87點,標普500與那斯達克各跌0.2%,自歷史新高回落,費城半導體跌1.2%。10年期美債殖利率收在5.276%,2年期降至4.762%。30年期房貸利率升至約7.52%,住宅建商股走弱。紐約原油下跌1.3%收每桶88.28美元,布蘭特原油仍在100美元之上。</p>
-      <p class="src">聯合新聞網 · <a href="https://udn.com/news/story/6811/9801820" target="_blank" rel="noopener">閱讀原文</a></p>
+      <span class="lab">美國</span><span class="time">10/7 23:00</span>
+      <h3>SpaceX傳籌資400億美元購輝達晶片,信用利差擴大</h3>
+      <p>報導指出SpaceX洽談籌資約400億美元用於採購輝達AI晶片,其中約100億美元為銀行貸款、約300億美元為投資等級債務。消息傳出後,SpaceX五年期信用違約交換(CDS)盤中上升14.3個基點至約195.2個基點。其2056年到期、票面利率6.65%的公司債利差擴大10個基點至236個基點,高於6月發行時的175個基點。摩根士丹利估計,到2028年AI基礎建設需要1.5兆美元外部融資。</p>
+      <p class="src">鉅亨網 · <a href="https://news.cnyes.com/news/id/6624305" target="_blank" rel="noopener">閱讀原文</a></p>
+    </article>
+    <article>
+      <span class="lab">韓國</span><span class="time">10/8 07:26</span>
+      <h3>三星第三季初估營業利益107.4兆韓元創新高,但略低於預期</h3>
+      <p>三星電子公布第三季初步業績,營業利益約107.4兆韓元(約801億美元),為去年同期的8倍以上並創單季新高。市場平均預估為108.7兆韓元,實際數字低約1.2%。營收約195兆韓元,同樣低於預期。分析師原預估晶片部門營業利益約110兆韓元,完整財報預計10月底公布。</p>
+      <p class="src">經濟日報 · <a href="https://money.udn.com/money/story/5599/9801834" target="_blank" rel="noopener">閱讀原文</a></p>
     </article>
     <article>
       <span class="lab">歐洲</span><span class="time">10/7 14:54</span>
-      <h3>德國8月工業產出月增2%,優於預期</h3>
-      <p>德國聯邦統計局初步數據顯示,8月工業產出經季調後月增2%,年增2.3%,7月則下修為月減1.2%。成長主要來自建築業月增9.3%及機械設備製造月增5.3%。汽車業則月減5.4%,連續第二個月下滑;高耗能產業月減0.5%。</p>
+      <h3>德國8月工業產出月增2%,優於市場預期</h3>
+      <p>德國統計局初步數據顯示,8月工業產出經季節與價格調整後月增2%,年增2.3%,7月則下修為月減1.2%。營建業月增9.3%、機械設備月增5.3%帶動整體回升,汽車業則月減5.4%,連續第二個月下滑。6至8月產出較前三個月增加0.4%。</p>
       <p class="src">Investing.com 中文版 · <a href="https://hk.investing.com/news/economic-indicators/article-93CH-1687780" target="_blank" rel="noopener">閱讀原文</a></p>
     </article>
   </div>
