@@ -40,7 +40,7 @@
     #status.err { color: var(--err); }
 
     /* ---- Flex 卡片預覽（盡量接近 LINE 實際樣子）---- */
-    .fx-bubble { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .fx-bubble { max-width: 300px; margin: 0 auto; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
     .fx-box { display: flex; min-width: 0; }
     .fx-v { flex-direction: column; }
     .fx-h { flex-direction: row; }
@@ -81,6 +81,7 @@
     const $ = (id) => document.getElementById(id);
     let brief = null;
     let card = null;
+    let config = null;
 
     function setStatus(text, kind) {
       $('status').textContent = text || '';
@@ -150,8 +151,9 @@
         e.type = 'button';
         e.textContent = n.action.label;
         const primary = n.style === 'primary';
-        e.style.background = primary ? (n.color || '#06c755') : '#eef0f3';
-        e.style.color = primary ? '#fff' : '#1d1f23';
+        const link = n.style === 'link';
+        e.style.background = primary ? (n.color || '#06c755') : link ? 'transparent' : '#eef0f3';
+        e.style.color = primary ? '#fff' : link ? (n.color || '#06c755') : '#1d1f23';
         e.onclick = () => window.open(n.action.uri, '_blank');
         applyFlex(e, n, parentHorizontal);
         return e;
@@ -165,6 +167,7 @@
         if (!b[part]) continue;
         const e = draw(b[part]);
         if (part === 'footer' && b.styles?.footer?.separator) e.style.borderTop = '1px solid #dfe4ea';
+        if (b[part].action) { e.style.cursor = 'pointer'; e.onclick = () => window.open(b[part].action.uri, '_blank'); }
         wrap.appendChild(e);
       }
       $('preview').innerHTML = '';
@@ -173,7 +176,7 @@
 
     async function start() {
       try {
-        const config = await getJSON('config.json');
+        config = await getJSON('config.json');
         await liff.init({ liffId: config.liffId });
 
         // 在 LINE 外面（例如電腦瀏覽器）打開時，需要先登入
@@ -193,7 +196,8 @@
           : [{ label: '', image: brief.image, preview: brief.preview }];
         $('imgInfo').textContent = `${brief.images.map((i) => i.label || '晨報').join('、')}，共 ${brief.images.length} 張，對方可以存到手機`;
 
-        card = buildCard(brief, BASE);
+        // 卡片上放「轉傳給其他人」：收到的人點了會打開這個分享頁，也能分享到他自己的群組
+        card = buildCard(brief, BASE, { forwardUrl: `https://liff.line.me/${config.liffId}?date=${brief.date}` });
         renderPreview(card);
 
         if (!liff.isApiAvailable('shareTargetPicker')) {
