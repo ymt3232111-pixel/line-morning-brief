@@ -1,0 +1,78 @@
+# 每次有新的晨報 HTML 放進 briefs/ 就自動：
+#   1. 轉成圖片  2. 部署到 GitHub Pages  3. 推一則「點此分享」給你自己
+name: Daily brief
+
+on:
+  push:
+    branches: [main]
+    paths: ['briefs/*.html']
+  workflow_dispatch:
+    inputs:
+      date:
+        description: '指定日期 YYYY-MM-DD（留空 = 最新一份）'
+        required: false
+      notify:
+        description: '完成後推播提醒到我的 LINE'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-brief
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    env:
+      TZ: Asia/Taipei
+      LIFF_ID: ${{ vars.LIFF_ID }}
+      SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 安裝套件
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji
+
+      - name: 晨報轉圖片
+        id: render
+        run: node scripts/render.mjs ${{ inputs.date }}
+
+      - name: 存回 repo（保留每天的圖）
+        run: |
+          git config user.name "brief-bot"
+          git config user.email "brief-bot@users.noreply.github.com"
+          git add site
+          git diff --cached --quiet || git commit -m "brief: ${{ steps.render.outputs.date }}"
+          git pull --rebase --autostash
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: 部署到 GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
+
+      - name: 推播提醒到我的 LINE
+        if: ${{ github.event_name == 'push' || inputs.notify }}
+        env:
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+          BRIEF_DATE: ${{ steps.render.outputs.date }}
+        run: node scripts/notify.mjs

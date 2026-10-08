@@ -1,0 +1,14 @@
+{
+  "name": "line-morning-brief",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "把 Claude 做的每日晨報轉成圖片，透過 LINE LIFF 一鍵分享到群組",
+  "scripts": {
+    "render": "node scripts/render.mjs",
+    "notify": "node scripts/notify.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.56.0"
+  }
+}
