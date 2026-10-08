@@ -17,73 +17,158 @@
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; background: var(--bg); color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif; }
-    main { max-width: 520px; margin: 0 auto; padding: 16px 16px calc(120px + env(safe-area-inset-bottom)); }
-    header { display: flex; align-items: baseline; justify-content: space-between; margin: 4px 2px 12px; }
-    h1 { font-size: 19px; margin: 0; }
-    .date { font-size: 13px; color: var(--muted); }
-    .shot { background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.08); min-height: 240px;
-      display: flex; align-items: center; justify-content: center; }
-    .shot img { width: 100%; display: block; }
-    .shot.stack { display: block; }
-    .shot .cap { font-size: 12px; font-weight: 600; color: var(--muted); padding: 10px 12px 6px; background: var(--bg); }
-    .shot .cap:first-child { background: var(--card); }
-    #count { color: var(--green-dark); font-weight: 600; margin-left: 4px; }
-    .shot .placeholder { color: var(--muted); font-size: 14px; padding: 40px 16px; text-align: center; }
-    label { display: block; font-size: 13px; color: var(--muted); margin: 18px 2px 6px; }
-    textarea { width: 100%; min-height: 76px; resize: vertical; border: 1px solid var(--line); border-radius: 12px;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Noto Sans CJK TC", "Microsoft JhengHei", sans-serif; }
+    main { max-width: 520px; margin: 0 auto; padding: 16px 16px calc(130px + env(safe-area-inset-bottom)); }
+    .sec { font-size: 13px; color: var(--muted); margin: 18px 2px 8px; }
+    .sec:first-child { margin-top: 4px; }
+    .placeholder { color: var(--muted); font-size: 14px; padding: 40px 16px; text-align: center; background: var(--card); border-radius: 14px; }
+    textarea { width: 100%; min-height: 64px; resize: vertical; border: 1px solid var(--line); border-radius: 12px;
       padding: 10px 12px; font: inherit; font-size: 15px; background: var(--card); color: var(--text); }
-    .hint { font-size: 12px; color: var(--muted); margin: 6px 2px 0; }
+    .opt { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line);
+      border-radius: 12px; padding: 12px; font-size: 14px; margin-top: 10px; }
+    .opt input { width: 20px; height: 20px; accent-color: var(--green); }
+    .opt small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
     .bar { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(244,245,247,.96);
       border-top: 1px solid var(--line); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); }
     .bar-inner { max-width: 520px; margin: 0 auto; }
-    button { width: 100%; border: 0; border-radius: 12px; padding: 15px; font: inherit; font-size: 17px; font-weight: 600;
+    .send-btn { width: 100%; border: 0; border-radius: 12px; padding: 15px; font: inherit; font-size: 17px; font-weight: 600;
       background: var(--green); color: #fff; cursor: pointer; }
-    button:active { background: var(--green-dark); }
-    button:disabled { background: #b9c0c8; }
+    .send-btn:active { background: var(--green-dark); }
+    .send-btn:disabled { background: #b9c0c8; }
     #status { min-height: 20px; font-size: 13px; text-align: center; margin-top: 8px; color: var(--muted); }
     #status.ok { color: var(--green-dark); }
     #status.err { color: var(--err); }
+
+    /* ---- Flex 卡片預覽（盡量接近 LINE 實際樣子）---- */
+    .fx-bubble { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .fx-box { display: flex; min-width: 0; }
+    .fx-v { flex-direction: column; }
+    .fx-h { flex-direction: row; }
+    .fx-text { min-width: 0; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fx-text.wrap { white-space: pre-wrap; overflow: visible; }
+    .fx-sep { border-top: 1px solid #dfe4ea; }
+    .fx-btn { border: 0; border-radius: 8px; font: inherit; font-size: 14px; font-weight: 600; padding: 9px 8px; min-width: 0; }
+    .fx-img { display: block; }
   </style>
 </head>
 <body>
   <main>
-    <header>
-      <h1 id="title">每日晨報</h1>
-      <span class="date" id="date"></span>
-    </header>
+    <div class="sec">群組會收到這張卡片</div>
+    <div id="preview"><div class="placeholder">載入中…</div></div>
 
-    <div class="shot" id="shot"><div class="placeholder">載入中…</div></div>
-
-    <label for="msg">附帶的文字（可修改，清空就只傳圖片）</label>
+    <div class="sec">附帶的文字（可修改，清空就不傳文字）</div>
     <textarea id="msg">各位早安，今日晨報供參考 🙏</textarea>
-    <p class="hint">按下方按鈕後，可以一次勾選多個群組或好友。<span id="count"></span></p>
+
+    <label class="opt">
+      <input type="checkbox" id="withImages" />
+      <span>同時附上完整長圖<small id="imgInfo">表格截圖，對方可以存到手機</small></span>
+    </label>
   </main>
 
   <div class="bar">
     <div class="bar-inner">
-      <button id="share" disabled>選擇群組並分享</button>
+      <button class="send-btn" id="share" disabled>選擇群組並分享</button>
       <div id="status"></div>
     </div>
   </div>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script>
+  <script type="module">
+    import { buildCard } from '../card.js';
+
     // 網站根目錄：https://帳號.github.io/repo（不管 LIFF Endpoint 結尾有沒有斜線都算得對）
     const BASE = location.origin + location.pathname.replace(/\/liff(\/.*)?$/, '');
     const $ = (id) => document.getElementById(id);
     let brief = null;
+    let card = null;
 
     function setStatus(text, kind) {
-      const el = $('status');
-      el.textContent = text || '';
-      el.className = kind || '';
+      $('status').textContent = text || '';
+      $('status').className = kind || '';
     }
 
     async function getJSON(rel) {
       const res = await fetch(`${BASE}/${rel}?t=${Date.now()}`, { cache: 'no-store' });
       if (!res.ok) throw new Error(`讀不到 ${rel}（${res.status}）`);
       return res.json();
+    }
+
+    // ---- 把 Flex JSON 畫成 HTML 預覽 ----
+    const SIZE = { xxs: 11, xs: 13, sm: 14, md: 16, lg: 19, xl: 22 };
+    const GAP = { none: 0, xs: 2, sm: 4, md: 8, lg: 12, xl: 16, xxl: 20 };
+    function el(tag, cls) { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
+    function applyFlex(e, n, parentHorizontal) {
+      if (n.flex !== undefined) e.style.flex = n.flex === 0 ? '0 0 auto' : `${n.flex} 1 0`;
+      else if (parentHorizontal) e.style.flex = '1 1 0';
+      if (n.margin) e.style.marginTop = (GAP[n.margin] ?? parseInt(n.margin)) + 'px';
+    }
+    function draw(n, parentHorizontal) {
+      if (n.type === 'box') {
+        const e = el('div', `fx-box ${n.layout === 'horizontal' ? 'fx-h' : 'fx-v'}`);
+        if (n.backgroundColor) e.style.background = n.backgroundColor;
+        if (n.cornerRadius) e.style.borderRadius = n.cornerRadius;
+        if (n.paddingAll) e.style.padding = n.paddingAll;
+        for (const k of ['Top', 'Bottom', 'Start', 'End']) {
+          const v = n['padding' + k];
+          if (v) e.style['padding' + ({ Start: 'Left', End: 'Right' }[k] || k)] = v;
+        }
+        if (n.alignItems) e.style.alignItems = n.alignItems;
+        const gap = GAP[n.spacing] || 0;
+        n.contents.forEach((c, i) => {
+          const ce = draw(c, n.layout === 'horizontal');
+          if (i > 0 && gap && !c.margin) ce.style[n.layout === 'horizontal' ? 'marginLeft' : 'marginTop'] = gap + 'px';
+          if (i > 0 && c.margin && n.layout === 'horizontal') { ce.style.marginTop = ''; ce.style.marginLeft = (GAP[c.margin] || 0) + 'px'; }
+          e.appendChild(ce);
+        });
+        applyFlex(e, n, parentHorizontal);
+        return e;
+      }
+      if (n.type === 'text') {
+        const e = el('div', 'fx-text' + (n.wrap ? ' wrap' : ''));
+        e.textContent = n.text;
+        e.style.fontSize = (SIZE[n.size] || 14) + 'px';
+        if (n.color) e.style.color = n.color;
+        if (n.weight === 'bold') e.style.fontWeight = '700';
+        if (n.align) e.style.textAlign = n.align === 'end' ? 'right' : n.align;
+        applyFlex(e, n, parentHorizontal);
+        return e;
+      }
+      if (n.type === 'separator') {
+        const e = el('div', 'fx-sep');
+        applyFlex(e, n, false);
+        return e;
+      }
+      if (n.type === 'image') {
+        const e = el('img', 'fx-img');
+        e.src = n.url;
+        e.style.width = /px$/.test(n.size) ? n.size : '100%';
+        applyFlex(e, n, parentHorizontal);
+        return e;
+      }
+      if (n.type === 'button') {
+        const e = el('button', 'fx-btn');
+        e.type = 'button';
+        e.textContent = n.action.label;
+        const primary = n.style === 'primary';
+        e.style.background = primary ? (n.color || '#06c755') : '#eef0f3';
+        e.style.color = primary ? '#fff' : '#1d1f23';
+        e.onclick = () => window.open(n.action.uri, '_blank');
+        applyFlex(e, n, parentHorizontal);
+        return e;
+      }
+      return el('div');
+    }
+    function renderPreview(flex) {
+      const b = flex.contents;
+      const wrap = el('div', 'fx-bubble');
+      for (const part of ['header', 'body', 'footer']) {
+        if (!b[part]) continue;
+        const e = draw(b[part]);
+        if (part === 'footer' && b.styles?.footer?.separator) e.style.borderTop = '1px solid #dfe4ea';
+        wrap.appendChild(e);
+      }
+      $('preview').innerHTML = '';
+      $('preview').appendChild(wrap);
     }
 
     async function start() {
@@ -103,32 +188,13 @@
           ? await getJSON(`brief/${date}.json`)
           : await getJSON('latest.json');
 
-        $('title').textContent = brief.title;
-        $('date').textContent = brief.date;
-        // 新版有 images（每個分頁一張），舊版只有 image
         brief.images = brief.images && brief.images.length
           ? brief.images
           : [{ label: '', image: brief.image, preview: brief.preview }];
+        $('imgInfo').textContent = `${brief.images.map((i) => i.label || '晨報').join('、')}，共 ${brief.images.length} 張，對方可以存到手機`;
 
-        $('shot').innerHTML = '';
-        $('shot').classList.add('stack');
-        brief.images.forEach((it, i) => {
-          if (brief.images.length > 1) {
-            const cap = document.createElement('div');
-            cap.className = 'cap';
-            cap.textContent = `圖 ${i + 1}／${brief.images.length}${it.label ? '・' + it.label : ''}`;
-            $('shot').appendChild(cap);
-          }
-          const img = new Image();
-          img.alt = it.label || brief.title;
-          img.loading = i === 0 ? 'eager' : 'lazy';
-          img.src = `${BASE}/${it.preview}`;
-          img.onerror = () => {
-            $('shot').innerHTML = '<div class="placeholder">圖片還沒上線，請過一兩分鐘再開一次</div>';
-          };
-          $('shot').appendChild(img);
-        });
-        $('count').textContent = brief.images.length > 1 ? `會送出 ${brief.images.length} 張圖` : '';
+        card = buildCard(brief, BASE);
+        renderPreview(card);
 
         if (!liff.isApiAvailable('shareTargetPicker')) {
           setStatus('這個環境不能分享：請在 LINE App 裡開啟，並確認後台已開啟 shareTargetPicker', 'err');
@@ -137,33 +203,33 @@
         $('share').disabled = false;
       } catch (err) {
         console.error(err);
+        $('preview').innerHTML = '';
         setStatus('載入失敗：' + (err.message || err), 'err');
       }
     }
 
     $('share').addEventListener('click', async () => {
-      if (!brief) return;
+      if (!brief || !card) return;
       const messages = [];
       const text = $('msg').value.trim();
       if (text) messages.push({ type: 'text', text });
-      // LINE 一次最多 5 則訊息
-      brief.images.slice(0, text ? 4 : 5).forEach((it) => {
-        messages.push({
-          type: 'image',
-          originalContentUrl: `${BASE}/${it.image}`,
-          previewImageUrl: `${BASE}/${it.preview}`,
+      messages.push(card);
+      if ($('withImages').checked) {
+        // LINE 一次最多 5 則訊息
+        brief.images.slice(0, 5 - messages.length).forEach((it) => {
+          messages.push({
+            type: 'image',
+            originalContentUrl: `${BASE}/${it.image}`,
+            previewImageUrl: `${BASE}/${it.preview}`,
+          });
         });
-      });
+      }
 
       $('share').disabled = true;
       setStatus('');
       try {
         const res = await liff.shareTargetPicker(messages, { isMultiple: true });
-        if (res) {
-          setStatus('✅ 已分享', 'ok');
-        } else {
-          setStatus('已取消，沒有送出');
-        }
+        setStatus(res ? '✅ 已分享' : '已取消，沒有送出', res ? 'ok' : '');
       } catch (err) {
         console.error(err);
         setStatus('分享失敗：' + (err.message || err.code || err), 'err');

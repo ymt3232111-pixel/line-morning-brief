@@ -124,6 +124,55 @@ async function main() {
 
     const page = await open(hiRes, src);
     const title = (await page.title()).trim() || `每日晨報 ${date}`;
+
+    // ---- 抓卡片要用的文字資料（指標、新聞標題、免責聲明）----
+    const summary = await page.evaluate(() => {
+      const txt = (el) => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '');
+      const h1 = document.querySelector('h1');
+      const sub = h1 && h1.parentElement.querySelector('p');
+      const tables = [...document.querySelectorAll('table')].map((t) => {
+        const sec = t.closest('div:has(> h2), section:has(> h2)');
+        const h2 = sec && sec.querySelector(':scope > h2');
+        const heading = h2 ? (h2.childNodes[0] ? h2.childNodes[0].textContent.trim() : txt(h2)) : '';
+        return {
+          heading,
+          unit: h2 && /bp/i.test(txt(h2)) ? 'bp' : '%',
+          rows: [...(t.tBodies[0] ? t.tBodies[0].rows : [])].map((r) => {
+            const th = r.querySelector('th');
+            const a = th && th.querySelector('a');
+            const name = a ? txt(a) : th ? txt(th.childNodes[0] || th) : '';
+            return { name, cells: [...r.querySelectorAll('td')].map((td) => ({ t: txt(td), c: td.className })) };
+          }),
+        };
+      });
+      const news = [...document.querySelectorAll('article')].map((a) => ({
+        label: txt(a.querySelector('.lab')),
+        time: txt(a.querySelector('.time')),
+        title: txt(a.querySelector('h3')),
+      })).filter((n) => n.title);
+      const img = [...document.images].find((i) => i.naturalWidth && !/^(https?:|data:)/.test(i.getAttribute('src') || ''));
+      return {
+        title: txt(h1),
+        subtitle: txt(sub),
+        tables,
+        news,
+        footer: txt(document.querySelector('footer')),
+        logo: img ? { src: img.getAttribute('src'), w: img.naturalWidth, h: img.naturalHeight } : null,
+      };
+    });
+
+    // ---- 把原始晨報網頁也放上網站（卡片上的按鈕會打開它）----
+    const PAGE_DIR = path.join(SITE, 'b');
+    await fs.mkdir(PAGE_DIR, { recursive: true });
+    await fs.copyFile(src, path.join(PAGE_DIR, `${date}.html`));
+    for (const f of await fs.readdir(BRIEFS)) {
+      if (!f.endsWith('.html')) await fs.copyFile(path.join(BRIEFS, f), path.join(PAGE_DIR, f));
+    }
+    let logo = null;
+    if (summary.logo) {
+      logo = { path: `b/${summary.logo.src.replace(/^\.?\//, '')}`, w: summary.logo.w, h: summary.logo.h };
+    }
+    delete summary.logo;
     let labels = await listPanels(page);
     const hasPanels = labels.length > 0;
     if (!hasPanels) labels = [''];
@@ -194,6 +243,7 @@ async function main() {
     const info = {
       date, title, width, images,
       image: images[0].image, preview: images[0].preview, cover,
+      page: `b/${date}.html`, logo, summary,
       generatedAt: new Date().toISOString(),
     };
     const json = JSON.stringify(info, null, 2) + '\n';
