@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-08",
+  "title": "全球行情 2026-10-08",
+  "width": 856,
+  "images": [
+    {
+      "label": "行情快搜",
+      "image": "brief/2026-10-08-1.png",
+      "preview": "brief/2026-10-08-1_preview.jpg"
+    },
+    {
+      "label": "焦點新聞",
+      "image": "brief/2026-10-08-2.png",
+      "preview": "brief/2026-10-08-2_preview.jpg"
+    }
+  ],
+  "image": "brief/2026-10-08-1.png",
+  "preview": "brief/2026-10-08-1_preview.jpg",
+  "cover": "brief/2026-10-08_cover.jpg",
+  "generatedAt": "2026-10-08T03:36:40.432Z"
+}
