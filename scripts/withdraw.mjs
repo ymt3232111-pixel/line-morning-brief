@@ -48,7 +48,13 @@ async function main() {
     await fs.writeFile(pageFile, noticePage(date, { logo }));
   } else {
     list.delete(date);
-    await fs.copyFile(path.join(ROOT, 'briefs', `${date}.html`), pageFile);
+    // 恢復：重新跑 render 會比較完整，這裡先放回原檔並補上分頁隱藏規則
+    let html = await fs.readFile(path.join(ROOT, 'briefs', `${date}.html`), 'utf8');
+    if (!/<!doctype/i.test(html.slice(0, 200))) {
+      html = '<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+        + '<style>[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>\n' + html + '\n</body></html>';
+    }
+    await fs.writeFile(pageFile, html);
   }
 
   await fs.writeFile(LIST, JSON.stringify([...list].sort(), null, 2) + '\n');

@@ -165,7 +165,17 @@ async function main() {
     // ---- 把原始晨報網頁也放上網站（卡片上的按鈕會打開它）----
     const PAGE_DIR = path.join(SITE, 'b');
     await fs.mkdir(PAGE_DIR, { recursive: true });
-    await fs.copyFile(src, path.join(PAGE_DIR, `${date}.html`));
+    // 補上網頁必要的基本設定：Claude 發布時會自動加，但存成檔案時可能沒有
+    // （少了 [hidden] 規則，分頁會全部擠在同一頁）
+    let html = await fs.readFile(src, 'utf8');
+    const BASE_HEAD = '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
+      + '<style>[hidden]:not([hidden=until-found i]){display:none!important}</style>';
+    if (!/<!doctype/i.test(html.slice(0, 200))) {
+      html = `<!doctype html><html lang="zh-Hant"><head>${BASE_HEAD}</head><body>\n${html}\n</body></html>`;
+    } else if (!/\[hidden\][^{]*\{[^}]*display\s*:\s*none/i.test(html)) {
+      html = html.replace(/<head[^>]*>/i, (m) => m + '<style>[hidden]:not([hidden=until-found i]){display:none!important}</style>');
+    }
+    await fs.writeFile(path.join(PAGE_DIR, `${date}.html`), html);
     for (const f of await fs.readdir(BRIEFS)) {
       if (!f.endsWith('.html')) await fs.copyFile(path.join(BRIEFS, f), path.join(PAGE_DIR, f));
     }
