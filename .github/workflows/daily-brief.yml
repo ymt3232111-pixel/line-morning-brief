@@ -37,7 +37,8 @@ jobs:
       SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
     steps:
       - uses: actions/checkout@v4
-
+        with:
+          ref: ${{ github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -59,7 +60,7 @@ jobs:
           git config user.email "brief-bot@users.noreply.github.com"
           git add site
           git diff --cached --quiet || git commit -m "brief: ${{ steps.render.outputs.date }}"
-          git pull --rebase --autostash
+          git pull --rebase -X theirs --autostash
           git push
 
       - uses: actions/configure-pages@v5
