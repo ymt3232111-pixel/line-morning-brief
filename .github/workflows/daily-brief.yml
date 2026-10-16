@@ -72,7 +72,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
       - name: 推播提醒到我的 LINE
-        if: ${{ github.event_name == 'push' || inputs.notify }}
+        if: ${{ (github.event_name == 'push' && !contains(github.event.head_commit.message, '[no-notify]')) || inputs.notify }}
         env:
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
           LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
