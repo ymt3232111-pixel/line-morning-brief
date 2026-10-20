@@ -35,6 +35,10 @@
     .bar-inner { max-width: 520px; margin: 0 auto; }
     .send-btn { width: 100%; border: 0; border-radius: 12px; padding: 15px; font: inherit; font-size: 17px; font-weight: 600;
       background: var(--green); color: #fff; cursor: pointer; }
+    .save-btn { width: 100%; border: 1.5px solid var(--green); border-radius: 12px; padding: 13px; font: inherit; font-size: 16px; font-weight: 600;
+      background: var(--card); color: var(--green-dark); cursor: pointer; }
+    .save-btn:disabled { border-color: #b9c0c8; color: #b9c0c8; }
+    .tip { font-size: 12px; color: var(--muted); margin: 8px 2px 0; line-height: 1.6; }
     .send-btn:active { background: var(--green-dark); }
     .send-btn:disabled { background: #b9c0c8; }
     #status { min-height: 20px; font-size: 13px; text-align: center; margin-top: 8px; color: var(--muted); }
@@ -63,6 +67,10 @@
 
     <div class="sec">要一起送出的圖片（可複選，不勾就只傳卡片）</div>
     <div id="imgOpts"></div>
+
+    <div class="sec">想讓圖片「整包並排」？先存到手機，再從相簿一次選多張傳</div>
+    <button type="button" class="save-btn" id="saveImgs" disabled>儲存圖片到手機</button>
+    <p class="tip" id="saveTip">存好後回到聊天室 → 點相簿 → 一次勾選這幾張送出，LINE 就會並排成一包。</p>
   </main>
 
   <div class="bar">
@@ -226,6 +234,8 @@
           return;
         }
 
+        $('saveImgs').disabled = false;
+
         if (!liff.isApiAvailable('shareTargetPicker')) {
           setStatus('這個環境不能分享：請在 LINE App 裡開啟，並確認後台已開啟 shareTargetPicker', 'err');
           return;
@@ -267,6 +277,33 @@
       } finally {
         $('share').disabled = false;
       }
+    });
+
+    // ---- 儲存圖片到手機：優先用系統分享選單（可一次存全部），不支援就用外部瀏覽器開圖片頁 ----
+    $('saveImgs').addEventListener('click', async () => {
+      if (!brief) return;
+      const list = brief.shareList || brief.images;
+      try {
+        if (navigator.canShare && navigator.share) {
+          const files = await Promise.all(list.map(async (it, i) => {
+            const res = await fetch(`${BASE}/${it.image}`, { cache: 'no-store' });
+            const blob = await res.blob();
+            const ext = it.image.split('.').pop();
+            return new File([blob], `${brief.date}_${i + 1}_${it.label || '晨報'}.${ext}`, { type: blob.type || `image/${ext}` });
+          }));
+          if (navigator.canShare({ files })) {
+            await navigator.share({ files });
+            setStatus('在選單中點「儲存影像」即可存進相簿', 'ok');
+            return;
+          }
+        }
+      } catch (err) {
+        if (err && err.name === 'AbortError') return; // 使用者自己取消
+        console.warn(err);
+      }
+      // 備案：用手機瀏覽器打開圖片頁，長按圖片儲存
+      const url = `${BASE}/liff/save.html?date=${brief.date}`;
+      try { liff.openWindow({ url, external: true }); } catch { location.href = url; }
     });
 
     start();
