@@ -158,6 +158,7 @@ async function renderShareImages(browser, src, date, count) {
   const lo = await browser.newContext({ deviceScaleFactor: 1, colorScheme: 'light', locale: 'zh-TW' });
   const out = [];
   try {
+    const sets = [];
     for (let i = 0; i < count; i++) {
       const pages = [];
       for (const ctx of [hi, lo]) {
@@ -166,20 +167,57 @@ async function renderShareImages(browser, src, date, count) {
         await compactLayout(p, i);
         pages.push(p);
       }
-      const [big, small] = pages;
+      sets.push(pages);
+    }
+    // 所有圖片統一長寬：以最矮的那張（通常是新聞）為準，較高的把表格字級／列高逐步縮小到放得下
+    const heightOf = (p) => p.evaluate(() => Math.ceil(document.documentElement.scrollHeight));
+    const heights = [];
+    for (const [big] of sets) heights.push(await heightOf(big));
+    const target = Math.min(...heights);
+    const STEPS = [[13.5, 5, 13], [13, 4, 12.5], [12.5, 3.5, 12], [12, 3, 11.5], [11.5, 2.5, 11], [11, 2, 10.5]];
+    for (let i = 0; i < count; i++) {
+      for (const p of sets[i]) {
+        if (heights[i] > target) {
+          for (const [fs, pad, th] of STEPS) {
+            await p.evaluate(([fs, pad, th]) => {
+              let el = document.getElementById('fit-css');
+              if (!el) { el = document.createElement('style'); el.id = 'fit-css'; document.head.appendChild(el); }
+              el.textContent = `tbody th,tbody td{font-size:${fs}px!important;padding-top:${pad}px!important;padding-bottom:${pad}px!important}
+                thead th{font-size:${th}px!important;padding-top:${pad + 1}px!important;padding-bottom:${pad + 1}px!important}
+                h2{margin-bottom:3px!important;font-size:15px!important}section.panel{gap:8px!important}.cmp-stack{gap:8px!important}`;
+            }, [fs, pad, th]);
+            await p.waitForTimeout(100);
+            if ((await heightOf(p)) <= target) break;
+          }
+        }
+        // 補齊到同一高度，頁尾警語貼底
+        await p.evaluate((h) => {
+          const css = document.createElement('style');
+          css.textContent = `body{min-height:${h}px;display:flex;flex-direction:column;margin:0}
+            body>main{flex:1;display:flex;flex-direction:column}
+            body>main>footer{margin-top:auto!important}`;
+          document.head.appendChild(css);
+        }, target);
+        await p.setViewportSize({ width: SHARE_WIDTH, height: target });
+        await p.waitForTimeout(150);
+      }
+    }
+    for (let i = 0; i < count; i++) {
+      const [big, small] = sets[i];
+      const clip = { x: 0, y: 0, width: SHARE_WIDTH, height: target };
       let image = `brief/${date}-share-${i + 1}.png`;
-      await big.screenshot({ path: path.join(SITE, image), fullPage: true });
+      await big.screenshot({ path: path.join(SITE, image), clip });
       if ((await size(path.join(SITE, image))) > MAX_ORIGINAL) {
         await fs.rm(path.join(SITE, image));
         image = `brief/${date}-share-${i + 1}.jpg`;
         for (const q of [92, 85, 75, 65]) {
-          await big.screenshot({ path: path.join(SITE, image), fullPage: true, type: 'jpeg', quality: q });
+          await big.screenshot({ path: path.join(SITE, image), clip, type: 'jpeg', quality: q });
           if ((await size(path.join(SITE, image))) <= MAX_ORIGINAL) break;
         }
       }
       const preview = `brief/${date}-share-${i + 1}_preview.jpg`;
       for (const q of [80, 65, 50, 35]) {
-        await small.screenshot({ path: path.join(SITE, preview), fullPage: true, type: 'jpeg', quality: q });
+        await small.screenshot({ path: path.join(SITE, preview), clip, type: 'jpeg', quality: q });
         if ((await size(path.join(SITE, preview))) <= MAX_PREVIEW) break;
       }
       await big.close(); await small.close();
