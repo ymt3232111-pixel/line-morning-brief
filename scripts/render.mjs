@@ -110,6 +110,87 @@ async function neededWidth(page) {
   return width;
 }
 
+
+// ---- 分享用精簡圖：行情一張（股市左右兩欄、匯市與債市並排）、新聞一張（兩欄）----
+const SHARE_WIDTH = 1500;  // CSS px，比例接近正方形，手機點開好讀
+const SHARE_SCALE = 1.5;
+
+async function compactLayout(page, idx) {
+  await page.evaluate((idx) => {
+    const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+    panels.forEach((p, i) => { p.hidden = i !== idx; p.style.display = i === idx ? '' : 'none'; });
+    document.querySelectorAll('[role="tablist"]').forEach((t) => { (t.closest('nav') || t).style.display = 'none'; });
+    const css = document.createElement('style');
+    css.textContent = `
+      .wrap{max-width:none!important}.rotate-tip,.legend{display:none!important}
+      .scroll{overflow:visible!important}table{min-width:0!important}
+      thead th:first-child,tbody th{position:static!important;min-width:0!important}
+      .cmp-two{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+      .cmp-two>div{min-width:0}.cmp-stack{display:flex;flex-direction:column;gap:12px}
+      .news{grid-template-columns:1fr 1fr!important}.news article:first-child{grid-column:1/-1}
+      article p{max-width:none!important}
+      thead th{font-size:13.5px;padding:7px 8px}tbody th,tbody td{font-size:14px;padding:6px 8px}
+      main{padding-block:10px 4px!important}section.panel{gap:12px!important}
+      footer{margin-top:10px!important;padding-block:8px 10px!important;font-size:11px!important}`;
+    document.head.appendChild(css);
+    const panel = panels[idx];
+    if (!panel) return;
+    // 每個表格所在的區塊（<div><h2>…</h2><div class="scroll"><table>）
+    const blocks = [...panel.querySelectorAll('table')].map((t) => t.closest('.scroll')?.parentElement).filter(Boolean);
+    // 版面：左欄放第一個表格（股市），右欄由上而下放其餘表格（匯市與油金、債市、美銀美林）
+    if (blocks.length >= 2) {
+      const grid = document.createElement('div');
+      grid.className = 'cmp-two';
+      const left = document.createElement('div');
+      const right = document.createElement('div');
+      right.className = 'cmp-stack';
+      blocks[0].before(grid);
+      left.appendChild(blocks[0]);
+      blocks.slice(1).forEach((bk) => right.appendChild(bk));
+      grid.append(left, right);
+    }
+  }, idx);
+  await page.waitForTimeout(200);
+}
+
+async function renderShareImages(browser, src, date, count) {
+  const hi = await browser.newContext({ deviceScaleFactor: SHARE_SCALE, colorScheme: 'light', locale: 'zh-TW' });
+  const lo = await browser.newContext({ deviceScaleFactor: 1, colorScheme: 'light', locale: 'zh-TW' });
+  const out = [];
+  try {
+    for (let i = 0; i < count; i++) {
+      const pages = [];
+      for (const ctx of [hi, lo]) {
+        const p = await open(ctx, src);
+        await p.setViewportSize({ width: SHARE_WIDTH, height: 200 });
+        await compactLayout(p, i);
+        pages.push(p);
+      }
+      const [big, small] = pages;
+      let image = `brief/${date}-share-${i + 1}.png`;
+      await big.screenshot({ path: path.join(SITE, image), fullPage: true });
+      if ((await size(path.join(SITE, image))) > MAX_ORIGINAL) {
+        await fs.rm(path.join(SITE, image));
+        image = `brief/${date}-share-${i + 1}.jpg`;
+        for (const q of [92, 85, 75, 65]) {
+          await big.screenshot({ path: path.join(SITE, image), fullPage: true, type: 'jpeg', quality: q });
+          if ((await size(path.join(SITE, image))) <= MAX_ORIGINAL) break;
+        }
+      }
+      const preview = `brief/${date}-share-${i + 1}_preview.jpg`;
+      for (const q of [80, 65, 50, 35]) {
+        await small.screenshot({ path: path.join(SITE, preview), fullPage: true, type: 'jpeg', quality: q });
+        if ((await size(path.join(SITE, preview))) <= MAX_PREVIEW) break;
+      }
+      await big.close(); await small.close();
+      out.push({ image, preview });
+    }
+  } finally {
+    await hi.close(); await lo.close();
+  }
+  return out;
+}
+
 async function main() {
   const date = await pickDate();
   const src = path.join(BRIEFS, `${date}.html`);
@@ -250,6 +331,15 @@ async function main() {
       images.push({ label: labels[i], image, preview });
     }
 
+    // 分享用精簡圖（分享頁可勾選要不要附上）；失敗不影響其他產出
+    let shareImages = [];
+    try {
+      const made = await renderShareImages(browser, src, date, labels.length);
+      shareImages = made.map((m, i) => ({ label: labels[i], ...m }));
+    } catch (err) {
+      console.warn('⚠️ 精簡圖產生失敗：' + err.message);
+    }
+
     // 封面：第一頁最上方 3:4，給提醒卡片用
     if (hasPanels) await showPanel(page, 0);
     const contentHeight = await page.evaluate(() =>
@@ -262,7 +352,7 @@ async function main() {
 
     // 資料檔（image / preview 保留第一張，相容舊版）
     const info = {
-      date, title, width, images,
+      date, title, width, images, shareImages,
       image: images[0].image, preview: images[0].preview, cover,
       page: `b/${date}.html`, logo, summary,
       ...(withdrawn ? { withdrawn: true } : {}),
@@ -291,6 +381,7 @@ async function main() {
       console.log(`   ${im.label || '整頁'}：${im.image} ${(await size(path.join(SITE, im.image)) / 1024).toFixed(0)} KB`
         + ` / 預覽 ${(await size(path.join(SITE, im.preview)) / 1024).toFixed(0)} KB`);
     }
+    for (const im of shareImages) console.log(`   精簡圖 ${im.label}：${im.image} ${(await size(path.join(SITE, im.image)) / 1024).toFixed(0)} KB`);
     console.log(`   封面：${cover}`);
   } finally {
     await browser.close();
