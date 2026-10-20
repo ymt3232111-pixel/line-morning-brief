@@ -28,6 +28,8 @@
       border-radius: 12px; padding: 12px; font-size: 14px; margin-top: 10px; }
     .opt input { width: 20px; height: 20px; accent-color: var(--green); }
     .opt small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .opt img { width: 64px; height: 64px; object-fit: cover; object-position: top left; border-radius: 6px; border: 1px solid var(--line); flex: none; }
+    .opt span { flex: 1; min-width: 0; }
     .bar { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(244,245,247,.96);
       border-top: 1px solid var(--line); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); }
     .bar-inner { max-width: 520px; margin: 0 auto; }
@@ -59,10 +61,8 @@
     <div class="sec">附帶的文字（可修改，清空就不傳文字）</div>
     <textarea id="msg">各位早安，今日晨報供參考 🙏</textarea>
 
-    <label class="opt">
-      <input type="checkbox" id="withImages" />
-      <span>同時附上完整長圖<small id="imgInfo">表格截圖，對方可以存到手機</small></span>
-    </label>
+    <div class="sec">要一起送出的圖片（可複選，不勾就只傳卡片）</div>
+    <div id="imgOpts"></div>
   </main>
 
   <div class="bar">
@@ -194,7 +194,27 @@
         brief.images = brief.images && brief.images.length
           ? brief.images
           : [{ label: '', image: brief.image, preview: brief.preview }];
-        $('imgInfo').textContent = `${brief.images.map((i) => i.label || '晨報').join('、')}，共 ${brief.images.length} 張，對方可以存到手機`;
+        // 分享用精簡圖（行情一張、新聞一張）；舊資料沒有就用原本的長圖
+        brief.shareList = brief.shareImages && brief.shareImages.length ? brief.shareImages : brief.images;
+        $('imgOpts').innerHTML = '';
+        brief.shareList.forEach((it, i) => {
+          const lab = document.createElement('label');
+          lab.className = 'opt';
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.className = 'imgPick';
+          cb.value = String(i);
+          const th = new Image();
+          th.src = `${BASE}/${it.preview}`;
+          th.alt = '';
+          const sp = document.createElement('span');
+          sp.textContent = `${it.label || '晨報'}圖`;
+          const sm = document.createElement('small');
+          sm.textContent = '對方可以點開放大、存到手機';
+          sp.appendChild(sm);
+          lab.append(cb, th, sp);
+          $('imgOpts').appendChild(lab);
+        });
 
         // 卡片上放「轉傳給其他人」：收到的人點了會打開這個分享頁，也能分享到他自己的群組
         card = buildCard(brief, BASE, { forwardUrl: `https://liff.line.me/${config.liffId}?date=${brief.date}` });
@@ -224,16 +244,17 @@
       const text = $('msg').value.trim();
       if (text) messages.push({ type: 'text', text });
       messages.push(card);
-      if ($('withImages').checked) {
-        // LINE 一次最多 5 則訊息
-        brief.images.slice(0, 5 - messages.length).forEach((it) => {
+      // 勾選的圖片（LINE 一次最多 5 則訊息）
+      [...document.querySelectorAll('.imgPick:checked')]
+        .map((cb) => brief.shareList[Number(cb.value)])
+        .slice(0, 5 - messages.length)
+        .forEach((it) => {
           messages.push({
             type: 'image',
             originalContentUrl: `${BASE}/${it.image}`,
             previewImageUrl: `${BASE}/${it.preview}`,
           });
         });
-      }
 
       $('share').disabled = true;
       setStatus('');
