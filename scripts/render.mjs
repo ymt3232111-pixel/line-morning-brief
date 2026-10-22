@@ -277,6 +277,7 @@ async function main() {
         tables,
         news,
         footer: txt(document.querySelector('footer')),
+        shareText: ((el) => (el ? el.textContent.trim().replace(/([0-9#*])\uFE0F?\u20E3/g, '$1\uFE0F\u20E3') : ''))(document.getElementById('share-text')), // 三秒看懂市場摘要
         logo: img ? { src: img.getAttribute('src'), w: img.naturalWidth, h: img.naturalHeight } : null,
       };
     });
