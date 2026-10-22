@@ -66,7 +66,10 @@ async function main() {
   message.altText = `📊 ${info.title} 已完成，點此分享到群組`;
 
   const endpoint = TEST_MODE ? 'push' : 'broadcast';
-  const payload = TEST_MODE ? { to: LINE_USER_ID.trim(), messages: [message] } : { messages: [message] };
+  // 晨報有「三秒看懂市場」摘要時，先送摘要文字、再送卡片
+  const shareText = info.summary && info.summary.shareText;
+  const msgs = shareText ? [{ type: 'text', text: shareText.slice(0, 5000) }, message] : [message];
+  const payload = TEST_MODE ? { to: LINE_USER_ID.trim(), messages: msgs } : { messages: msgs };
   console.log(TEST_MODE ? '🧪 測試模式：只推給你自己' : '📣 正式模式：廣播給所有好友');
 
   const res = await fetch(`https://api.line.me/v2/bot/message/${endpoint}`, {
