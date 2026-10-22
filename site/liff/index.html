@@ -203,6 +203,11 @@
           ? brief.images
           : [{ label: '', image: brief.image, preview: brief.preview }];
         // 分享用精簡圖（行情一張、新聞一張）；舊資料沒有就用原本的長圖
+        // 晨報有「三秒看懂市場」摘要時，預先帶入附帶文字（仍可修改）
+        if (brief.summary && brief.summary.shareText) {
+          $('msg').value = brief.summary.shareText;
+          $('msg').style.minHeight = '240px';
+        }
         brief.shareList = brief.shareImages && brief.shareImages.length ? brief.shareImages : brief.images;
         $('imgOpts').innerHTML = '';
         brief.shareList.forEach((it, i) => {
