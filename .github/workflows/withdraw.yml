@@ -17,8 +17,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: daily-brief
@@ -27,9 +25,6 @@ concurrency:
 jobs:
   withdraw:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -51,10 +46,13 @@ jobs:
           git pull --rebase -X theirs --autostash
           git push
 
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      # 過渡期：電腦上傳程式改指向私人 repo 之前，這裡也發布到 gh-pages
+      - name: 發布網頁到公開 repo
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: site
-      - name: 部署到 GitHub Pages
-        id: deploy
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./site
+          force_orphan: true
+          user_name: brief-bot
+          user_email: brief-bot@users.noreply.github.com
