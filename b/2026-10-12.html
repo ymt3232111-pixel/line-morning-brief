@@ -1,0 +1,173 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>全球行情 2026-10-12</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg:#f3f5f8; --paper:#ffffff; --ink:#18202b; --muted:#5b6676; --line:#dfe4ea; --zebra:#f6f8fa;
+  --navy:#0f2a4a; --navy-ink:#ffffff; --navy-sub:#b9c8dc;
+  --green:#1f6b4f; --green-ink:#ffffff; --green-soft:#e6f2ec;
+  --up:#c62828; --dn:#1b7a3d; --flat:#5b6676; --na:#9aa3ae; --link:#16467a; --tag-bg:#fdecea; --tag-ink:#a12a20;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-num:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d131b; --paper:#141c26; --ink:#e4e9f0; --muted:#97a3b3; --line:#263242; --zebra:#18222e;
+  --navy:#0b2340; --navy-ink:#f2f6fb; --navy-sub:#9fb3cc;
+  --green:#1d5c45; --green-ink:#eaf6f0; --green-soft:#16302a;
+  --up:#ff6b6b; --dn:#4cc77d; --flat:#97a3b3; --na:#5d6876; --link:#8cbcf2; --tag-bg:#3a1f1f; --tag-ink:#ff9b91; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d131b; --paper:#141c26; --ink:#e4e9f0; --muted:#97a3b3; --line:#263242; --zebra:#18222e;
+  --navy:#0b2340; --navy-ink:#f2f6fb; --navy-sub:#9fb3cc;
+  --green:#1d5c45; --green-ink:#eaf6f0; --green-soft:#16302a;
+  --up:#ff6b6b; --dn:#4cc77d; --flat:#97a3b3; --na:#5d6876; --link:#8cbcf2; --tag-bg:#3a1f1f; --tag-ink:#ff9b91; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.6;margin:0}
+a{color:var(--link)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+.mast{background:var(--navy);color:var(--navy-ink);padding:20px 16px 18px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px}
+.mast .wrap{padding-inline:0}
+.mast h1{margin:0;font-size:clamp(20px,4vw,28px);font-weight:900;letter-spacing:.02em;text-wrap:balance}
+.mast p{margin:6px 0 0;color:var(--navy-sub);font-size:13px}
+.mast p b{color:var(--navy-ink);font-weight:500}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:4px}
+.tabs button{appearance:none;border:0;background:none;color:var(--muted);font:inherit;font-weight:700;font-size:15px;padding:12px 16px;cursor:pointer;border-bottom:3px solid transparent}
+.tabs button[aria-selected="true"]{color:var(--green);border-bottom-color:var(--green)}
+main{padding-block:20px 8px}
+section.panel{display:flex;flex-direction:column;gap:22px}
+h2{font-size:17px;margin:0 0 8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 small{font-size:12px;font-weight:400;color:var(--muted)}
+.scroll{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:6px}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:760px}
+thead th{background:var(--green);color:var(--green-ink);font-weight:700;font-size:12.5px;padding:8px 10px;text-align:right;white-space:nowrap}
+thead th:first-child{text-align:left;position:sticky;left:0;z-index:2}
+tbody th,tbody td{padding:7px 10px;border-top:1px solid var(--line);white-space:nowrap}
+tbody th{text-align:left;font-weight:500;position:sticky;left:0;background:var(--paper);z-index:1;min-width:150px}
+tbody tr:nth-child(even) th,tbody tr:nth-child(even) td{background:var(--zebra)}
+tbody th a{text-decoration:none}
+tbody th a:hover{text-decoration:underline}
+td{text-align:right;font-family:var(--font-num);font-variant-numeric:tabular-nums;font-size:13px}
+td.px{color:var(--ink);font-weight:500}
+td.up{color:var(--up)} td.dn{color:var(--dn)} td.flat{color:var(--flat)} td.na{color:var(--na)}
+.tag{display:inline-block;margin-left:6px;font-size:11px;padding:0 6px;border-radius:3px;background:var(--tag-bg);color:var(--tag-ink);font-weight:500}
+.legend{font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.legend .u{color:var(--up);font-weight:700}.legend .d{color:var(--dn);font-weight:700}
+.news{display:grid;gap:14px}
+article{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 16px;min-width:0}
+article .lab{display:inline-block;font-size:12px;font-weight:700;background:var(--green-soft);color:var(--green);padding:1px 8px;border-radius:3px}
+:root[data-theme="dark"] article .lab{color:var(--green-ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) article .lab{color:var(--green-ink)}}
+article .time{font-size:12px;color:var(--muted);margin-left:8px;font-family:var(--font-num)}
+article h3{font-size:16px;margin:8px 0 6px;text-wrap:balance;line-height:1.45}
+article p{margin:0 0 8px;max-width:72ch}
+article .src{font-size:13px}
+.window{background:var(--green-soft);border-radius:6px;padding:10px 14px;font-size:13px}
+.brand{background:#ffffff;border-bottom:1px solid var(--line);padding:10px 16px}
+.brand .wrap{padding-inline:0;display:flex;align-items:center}
+.brand img{height:52px;width:auto;display:block}
+footer{border-top:1px solid var(--line);margin-top:24px;padding-block:16px 28px;font-size:11.5px;line-height:1.75;color:var(--muted)}
+footer p{margin:0;max-width:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="brand"><div class="wrap"><img src="logo.png" alt="富盛證券投資顧問股份有限公司"></div></div>
+<header class="mast">
+  <div class="wrap">
+    <h1>2026年10月12日 全球股債匯行情快搜</h1>
+    <p>數據收盤日:<b>2026/10/9(五)</b> 各市場收盤(休市:台灣加權 為 10/8 收盤、韓國KOSPI 為 10/8 收盤)· 債券指數為 <b>10/9</b> · 新聞範圍:<b>10/9 10:30 – 10/12 08:15</b>(台北時間)</p>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="分頁">
+  <div class="wrap" role="tablist">
+    <button role="tab" id="tab-mkt" aria-controls="p-mkt" aria-selected="true">行情快搜</button>
+    <button role="tab" id="tab-news" aria-controls="p-news" aria-selected="false">焦點新聞</button>
+  </div>
+</nav>
+
+<main class="wrap">
+<section class="panel" id="p-mkt" role="tabpanel" aria-labelledby="tab-mkt">
+  <div class="legend"><span>漲跌幅單位 %;殖利率變動單位 bp</span><span><span class="u">紅</span>=上漲 <span class="d">綠</span>=下跌</span><span>點擊名稱可開啟 Investing.com 歷史報價</span></div>
+  <div>
+    <h2>股市</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>指數</th><th>最新價格</th><th>近1日</th><th>近5日</th><th>1個月</th><th>3個月</th><th>6個月</th><th>年初迄今</th><th>近1年</th></tr></thead>
+      <tbody><tr><th scope="row"><a href="https://www.investing.com/indices/us-spx-500-historical-data" target="_blank" rel="noopener">S&amp;P 500</a></th><td class="px">7,811.54</td><td class="up">+0.59</td><td class="up">+1.15</td><td class="up">+2.02</td><td class="up">+3.12</td><td class="up">+14.59</td><td class="up">+14.11</td><td class="up">+19.21</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/us-30-historical-data" target="_blank" rel="noopener">道瓊工業</a></th><td class="px">51,654.95</td><td class="up">+0.83</td><td class="up">+0.93</td><td class="dn">-1.75</td><td class="dn">-1.87</td><td class="up">+7.80</td><td class="up">+7.47</td><td class="up">+13.58</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/nasdaq-composite-historical-data" target="_blank" rel="noopener">那斯達克</a></th><td class="px">27,366.17</td><td class="up">+0.64</td><td class="up">+0.64</td><td class="up">+3.92</td><td class="up">+4.13</td><td class="up">+19.49</td><td class="up">+17.74</td><td class="up">+23.25</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/phlx-semiconductor-historical-data" target="_blank" rel="noopener">費城半導體</a></th><td class="px">12,572.42</td><td class="dn">-0.41</td><td class="dn">-4.30</td><td class="up">+6.33</td><td class="dn">-3.04</td><td class="up">+41.42</td><td class="up">+77.50</td><td class="up">+96.21</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/volatility-s-p-500-historical-data" target="_blank" rel="noopener">VIX指數</a></th><td class="px">14.84</td><td class="dn">-3.70</td><td class="dn">-3.07</td><td class="dn">-6.31</td><td class="dn">-1.26</td><td class="dn">-22.83</td><td class="dn">-0.74</td><td class="dn">-31.49</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/s-p-tsx-composite-historical-data" target="_blank" rel="noopener">加拿大TSX綜合</a></th><td class="px">35,664.62</td><td class="up">+1.48</td><td class="up">+0.46</td><td class="dn">-0.09</td><td class="up">+1.17</td><td class="up">+5.27</td><td class="up">+12.47</td><td class="up">+19.48</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/stoxx-600-historical-data" target="_blank" rel="noopener">道瓊歐洲600</a></th><td class="px">631.55</td><td class="up">+0.97</td><td class="up">+0.03</td><td class="dn">-1.18</td><td class="dn">-1.49</td><td class="up">+2.72</td><td class="up">+6.65</td><td class="up">+11.95</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/uk-100-historical-data" target="_blank" rel="noopener">英國富時100</a></th><td class="px">10,552.05</td><td class="up">+1.06</td><td class="up">+0.86</td><td class="dn">-0.92</td><td class="up">+0.52</td><td class="dn">-0.46</td><td class="up">+6.25</td><td class="up">+11.93</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/germany-30-historical-data" target="_blank" rel="noopener">德國DAX</a></th><td class="px">25,087.27</td><td class="up">+1.13</td><td class="dn">-0.57</td><td class="dn">-1.88</td><td class="up">+0.08</td><td class="up">+5.39</td><td class="up">+2.44</td><td class="up">+3.49</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/france-40-historical-data" target="_blank" rel="noopener">法國CAC40</a></th><td class="px">7,803.33</td><td class="up">+0.95</td><td class="dn">-1.19</td><td class="dn">-4.60</td><td class="dn">-6.42</td><td class="dn">-5.52</td><td class="dn">-4.25</td><td class="dn">-1.45</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/japan-ni225-historical-data" target="_blank" rel="noopener">日經225</a></th><td class="px">69,030.92</td><td class="dn">-1.43</td><td class="up">+1.06</td><td class="up">+7.84</td><td class="up">+2.66</td><td class="up">+22.17</td><td class="up">+37.13</td><td class="up">+43.55</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/topix-historical-data" target="_blank" rel="noopener">東證指數</a></th><td class="px">4,104.81</td><td class="dn">-1.19</td><td class="up">+0.34</td><td class="up">+1.90</td><td class="up">+2.43</td><td class="up">+10.26</td><td class="up">+20.41</td><td class="up">+28.37</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/aus-200-historical-data" target="_blank" rel="noopener">澳洲ASX200</a></th><td class="px">8,716.637</td><td class="up">+0.64</td><td class="up">+0.96</td><td class="up">+0.33</td><td class="dn">-0.41</td><td class="dn">-2.13</td><td class="up">+0.64</td><td class="dn">-2.10</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/hang-sen-40-historical-data" target="_blank" rel="noopener">香港恆生</a></th><td class="px">24,211.35</td><td class="up">+0.34</td><td class="up">+1.00</td><td class="dn">-2.40</td><td class="up">+0.15</td><td class="dn">-6.50</td><td class="dn">-5.54</td><td class="dn">-7.91</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/singapore-straits-time-historical-data" target="_blank" rel="noopener">新加坡海峽</a></th><td class="px">5,401.89</td><td class="dn">-3.68</td><td class="dn">-4.13</td><td class="dn">-5.16</td><td class="dn">-1.23</td><td class="up">+8.27</td><td class="up">+16.26</td><td class="up">+22.02</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/msci-emerging-markets-historical-data" target="_blank" rel="noopener">MSCI新興市場</a></th><td class="px">1,708.774</td><td class="up">+0.60</td><td class="dn">-1.79</td><td class="dn">-0.74</td><td class="up">+1.07</td><td class="up">+10.42</td><td class="up">+21.68</td><td class="up">+25.12</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/msci-em-asia-historical-data" target="_blank" rel="noopener">MSCI新興亞洲</a></th><td class="px">967.0318</td><td class="up">+0.51</td><td class="dn">-2.13</td><td class="dn">-0.48</td><td class="up">+0.61</td><td class="up">+13.78</td><td class="up">+24.74</td><td class="up">+27.35</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/msci-em-emea-historical-data" target="_blank" rel="noopener">MSCI歐非中東</a></th><td class="px">257.791</td><td class="up">+0.78</td><td class="dn">-0.86</td><td class="dn">-7.66</td><td class="dn">-1.89</td><td class="dn">-6.31</td><td class="dn">-0.55</td><td class="up">+2.19</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/msci-em-latin-america-historical-data" target="_blank" rel="noopener">MSCI新興拉美</a></th><td class="px">3,372.916</td><td class="up">+1.45</td><td class="up">+9.65</td><td class="up">+6.74</td><td class="up">+11.28</td><td class="up">+1.20</td><td class="up">+24.49</td><td class="up">+39.29</td></tr><tr><th scope="row"><a href="https://www.investing.com/search/?q=MSCI%20AC%20Asia%20Pacific%20ex%20Japan" target="_blank" rel="noopener">MSCI亞太(不含日本)</a></th><td class="px">874.6473</td><td class="up">+0.57</td><td class="dn">-1.82</td><td class="dn">-1.02</td><td class="up">+0.37</td><td class="up">+10.42</td><td class="up">+21.11</td><td class="up">+22.97</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/csi300-historical-data" target="_blank" rel="noopener">滬深300</a></th><td class="px">4,317.255</td><td class="up">+0.16</td><td class="dn">-2.75</td><td class="dn">-4.28</td><td class="dn">-9.70</td><td class="dn">-6.89</td><td class="dn">-6.75</td><td class="dn">-6.49</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/hang-seng-china-enterprises-historical-data" target="_blank" rel="noopener">香港國企</a></th><td class="px">8,147.87</td><td class="up">+0.81</td><td class="up">+1.46</td><td class="dn">-1.19</td><td class="up">+1.35</td><td class="dn">-5.86</td><td class="dn">-8.59</td><td class="dn">-12.93</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/taiwan-weighted-historical-data" target="_blank" rel="noopener">台灣加權</a><span class="tag">休市</span></th><td class="px">49,313.44</td><td class="dn">-0.99</td><td class="up">+1.99</td><td class="up">+6.77</td><td class="up">+8.73</td><td class="up">+39.23</td><td class="up">+70.26</td><td class="up">+80.62</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/kospi-historical-data" target="_blank" rel="noopener">韓國KOSPI</a><span class="tag">休市</span></th><td class="px">6,625.93</td><td class="dn">-2.62</td><td class="dn">-5.99</td><td class="dn">-5.16</td><td class="dn">-12.34</td><td class="up">+11.86</td><td class="up">+55.51</td><td class="up">+81.51</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/sensex-historical-data" target="_blank" rel="noopener">印度SENSEX</a></th><td class="px">72,472.33</td><td class="up">+1.23</td><td class="up">+0.78</td><td class="dn">-3.09</td><td class="dn">-6.57</td><td class="dn">-6.55</td><td class="dn">-14.96</td><td class="dn">-12.16</td></tr><tr><th scope="row"><a href="https://www.investing.com/indices/vn-historical-data" target="_blank" rel="noopener">越南VN指數</a></th><td class="px">1,735.09</td><td class="dn">-0.22</td><td class="dn">-0.15</td><td class="dn">-3.35</td><td class="dn">-5.10</td><td class="dn">-0.85</td><td class="dn">-2.77</td><td class="dn">-0.71</td></tr></tbody>
+    </table></div>
+  </div>
+  <div>
+    <h2>匯市與油金</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>項目</th><th>最新價格</th><th>近1日</th><th>近5日</th><th>1個月</th><th>3個月</th><th>6個月</th><th>年初迄今</th><th>近1年</th></tr></thead>
+      <tbody><tr><th scope="row"><a href="https://www.investing.com/indices/usdollar-historical-data" target="_blank" rel="noopener">美元指數</a></th><td class="px">102.213</td><td class="up">+0.07</td><td class="up">+0.03</td><td class="up">+3.11</td><td class="up">+1.24</td><td class="up">+3.60</td><td class="up">+3.94</td><td class="up">+3.26</td></tr><tr><th scope="row"><a href="https://www.investing.com/currencies/eur-usd-historical-data" target="_blank" rel="noopener">歐元兌美元</a></th><td class="px">1.12</td><td class="dn">-0.10</td><td class="dn">-0.12</td><td class="dn">-2.94</td><td class="dn">-1.51</td><td class="dn">-4.68</td><td class="dn">-4.57</td><td class="dn">-3.12</td></tr><tr><th scope="row"><a href="https://www.investing.com/currencies/aud-usd-historical-data" target="_blank" rel="noopener">澳幣兌美元</a></th><td class="px">0.6983</td><td class="up">+0.37</td><td class="up">+0.23</td><td class="dn">-2.13</td><td class="up">+1.01</td><td class="dn">-1.51</td><td class="up">+4.72</td><td class="up">+7.26</td></tr><tr><th scope="row"><a href="https://www.investing.com/currencies/usd-jpy-historical-data" target="_blank" rel="noopener">美元兌日圓</a></th><td class="px">158.31</td><td class="up">+0.27</td><td class="dn">-0.15</td><td class="dn">-2.40</td><td class="up">+2.71</td><td class="up">+0.82</td><td class="dn">-0.91</td><td class="dn">-3.71</td></tr><tr><th scope="row"><a href="https://www.investing.com/currencies/usd-cnh-historical-data" target="_blank" rel="noopener">美元兌離岸人民幣</a></th><td class="px">6.6927</td><td class="dn">-0.16</td><td class="up">+0.18</td><td class="up">+0.26</td><td class="up">+1.39</td><td class="up">+1.91</td><td class="up">+4.24</td><td class="up">+6.67</td></tr><tr><th scope="row"><a href="https://www.investing.com/currencies/usd-twd-historical-data" target="_blank" rel="noopener">美元兌台幣</a></th><td class="px">31.926</td><td class="up">+0.13</td><td class="dn">-0.20</td><td class="dn">-1.44</td><td class="up">+0.82</td><td class="dn">-0.34</td><td class="dn">-1.60</td><td class="dn">-4.40</td></tr><tr><th scope="row"><a href="https://www.investing.com/currencies/usd-zar-historical-data" target="_blank" rel="noopener">美元兌南非幣</a></th><td class="px">16.5056</td><td class="dn">-0.49</td><td class="up">+0.88</td><td class="dn">-1.44</td><td class="dn">-0.15</td><td class="dn">-0.47</td><td class="up">+0.41</td><td class="up">+5.00</td></tr><tr><th scope="row"><a href="https://www.investing.com/commodities/crude-oil-historical-data" target="_blank" rel="noopener">西德州原油</a></th><td class="px">91.85</td><td class="up">+0.39</td><td class="up">+1.59</td><td class="dn">-5.31</td><td class="up">+28.14</td><td class="up">+19.30</td><td class="up">+59.61</td><td class="up">+54.85</td></tr><tr><th scope="row"><a href="https://www.investing.com/currencies/xau-usd-historical-data" target="_blank" rel="noopener">黃金現貨</a></th><td class="px">4,194.24</td><td class="up">+1.49</td><td class="up">+1.42</td><td class="dn">-2.36</td><td class="up">+4.89</td><td class="dn">-11.43</td><td class="dn">-2.80</td><td class="up">+2.14</td></tr></tbody>
+    </table></div>
+  </div>
+  <div>
+    <h2>債市 <small>殖利率 %,變動 bp</small></h2>
+    <div class="scroll"><table>
+      <thead><tr><th>公債</th><th>殖利率</th><th>近1日</th><th>近5日</th><th>1個月</th><th>3個月</th><th>6個月</th><th>年初迄今</th><th>近1年</th></tr></thead>
+      <tbody><tr><th scope="row"><a href="https://www.investing.com/rates-bonds/u.s.-2-year-bond-yield-historical-data" target="_blank" rel="noopener">美國2年期公債</a></th><td class="px">4.7869</td><td class="up">+2.9</td><td class="dn">-2.5</td><td class="up">+16.2</td><td class="up">+57.9</td><td class="up">+99.2</td><td class="up">+131.4</td><td class="up">+128.5</td></tr><tr><th scope="row"><a href="https://www.investing.com/rates-bonds/u.s.-10-year-bond-yield-historical-data" target="_blank" rel="noopener">美國10年期公債</a></th><td class="px">5.2378</td><td class="up">+1.1</td><td class="dn">-6.7</td><td class="up">+27.1</td><td class="up">+67.7</td><td class="up">+92.1</td><td class="up">+107.1</td><td class="up">+120.6</td></tr><tr><th scope="row"><a href="https://www.investing.com/rates-bonds/u.s.-30-year-bond-yield-historical-data" target="_blank" rel="noopener">美國30年期公債</a></th><td class="px">5.5956</td><td class="dn">-0.5</td><td class="dn">-6.7</td><td class="up">+24.3</td><td class="up">+53.7</td><td class="up">+68.7</td><td class="up">+75.2</td><td class="up">+97.7</td></tr><tr><th scope="row"><a href="https://www.investing.com/rates-bonds/germany-2-year-bond-yield-historical-data" target="_blank" rel="noopener">德國2年期公債</a></th><td class="px">3.127</td><td class="up">+1.7</td><td class="up">+5.1</td><td class="up">+5.5</td><td class="up">+48.0</td><td class="up">+60.8</td><td class="up">+100.5</td><td class="up">+113.0</td></tr><tr><th scope="row"><a href="https://www.investing.com/rates-bonds/germany-10-year-bond-yield-historical-data" target="_blank" rel="noopener">德國10年期公債</a></th><td class="px">3.481</td><td class="dn">-1.4</td><td class="up">+1.9</td><td class="up">+3.7</td><td class="up">+39.7</td><td class="up">+49.3</td><td class="up">+62.6</td><td class="up">+77.8</td></tr><tr><th scope="row"><a href="https://www.investing.com/rates-bonds/germany-30-year-bond-yield-historical-data" target="_blank" rel="noopener">德國30年期公債</a></th><td class="px">3.853</td><td class="dn">-1.1</td><td class="up">+3.4</td><td class="dn">-3.2</td><td class="up">+22.7</td><td class="up">+32.9</td><td class="up">+37.6</td><td class="up">+57.4</td></tr></tbody>
+    </table></div>
+  </div>
+  <div>
+    <h2>美銀美林(ICE BofA)債券指數報酬 % <small>總報酬指數,資料日 2026/10/9</small></h2>
+    <div class="scroll"><table style="min-width:900px">
+      <thead><tr><th>指數</th><th>近1日</th><th>本月迄今</th><th>本季迄今</th><th>年初迄今</th><th>近1年</th><th>近3年年化</th><th>近5年年化</th><th>近10年年化</th></tr></thead>
+      <tbody><tr><th scope="row">美國公債</th><td class="dn">-0.04</td><td class="up">+0.33</td><td class="up">+0.33</td><td class="dn">-2.41</td><td class="dn">-1.81</td><td class="up">+3.65</td><td class="dn">-1.01</td><td class="up">+0.52</td></tr><tr><th scope="row">美國MBS</th><td class="flat">0.00</td><td class="up">+0.50</td><td class="up">+0.50</td><td class="dn">-2.53</td><td class="dn">-1.26</td><td class="up">+5.15</td><td class="dn">-0.24</td><td class="up">+0.90</td></tr><tr><th scope="row"><a href="https://fred.stlouisfed.org/series/BAMLCC0A0CMTRIV" target="_blank" rel="noopener">美國投資級債</a></th><td class="dn">-0.06</td><td class="up">+0.43</td><td class="up">+0.43</td><td class="dn">-2.36</td><td class="dn">-1.71</td><td class="up">+5.78</td><td class="dn">-0.02</td><td class="up">+2.17</td></tr><tr><th scope="row">歐洲投資級債</th><td class="up">+0.10</td><td class="up">+0.31</td><td class="up">+0.31</td><td class="dn">-0.94</td><td class="dn">-0.89</td><td class="up">+4.07</td><td class="dn">-0.23</td><td class="up">+0.66</td></tr><tr><th scope="row"><a href="https://fred.stlouisfed.org/series/BAMLHYH0A0HYM2TRIV" target="_blank" rel="noopener">美國非投資級債</a></th><td class="up">+0.08</td><td class="up">+0.21</td><td class="up">+0.21</td><td class="up">+0.25</td><td class="up">+1.87</td><td class="up">+8.48</td><td class="up">+3.66</td><td class="up">+4.94</td></tr><tr><th scope="row"><a href="https://fred.stlouisfed.org/series/BAMLHE00EHYITRIV" target="_blank" rel="noopener">歐洲非投資級債</a></th><td class="up">+0.10</td><td class="dn">-0.44</td><td class="dn">-0.44</td><td class="dn">-0.38</td><td class="up">+0.49</td><td class="up">+6.56</td><td class="up">+2.46</td><td class="up">+3.44</td></tr><tr><th scope="row">新興市場本地債</th><td class="up">+0.13</td><td class="up">+0.45</td><td class="up">+0.45</td><td class="up">+0.67</td><td class="up">+3.40</td><td class="up">+8.08</td><td class="up">+2.21</td><td class="up">+2.69</td></tr><tr><th scope="row">新興市場主權債</th><td class="up">+0.25</td><td class="up">+0.20</td><td class="up">+0.20</td><td class="dn">-2.56</td><td class="dn">-0.10</td><td class="up">+9.25</td><td class="up">+0.86</td><td class="up">+2.01</td></tr><tr><th scope="row"><a href="https://fred.stlouisfed.org/series/BAMLEMCBPITRIV" target="_blank" rel="noopener">新興市場公司債</a></th><td class="up">+0.07</td><td class="up">+0.14</td><td class="up">+0.14</td><td class="dn">-1.15</td><td class="dn">-0.01</td><td class="up">+7.20</td><td class="up">+1.01</td><td class="up">+2.66</td></tr></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section class="panel" id="p-news" role="tabpanel" aria-labelledby="tab-news" hidden>
+  <div class="window">本期新聞時間範圍:2026年10月9日(五) 10:30 至 10月12日(一) 08:15(台北時間),涵蓋週末。各則標示之時間為台北時間的發布時間。</div>
+  <div class="news">
+    <article>
+      <span class="lab">美國</span><span class="time">10/9 23:00</span>
+      <h3>美國10月密大消費者信心初值降至46.3,現況指數創歷史新低</h3>
+      <p>密西根大學10月消費者信心指數初值由9月的48.1降至46.3,為5月以來新低,也低於市場預估的47.8。其中現況指數由50.9跌至44.7,寫下歷史新低;預期指數則由46.3回升至47.3。一年期通膨預期由4.6%升至4.7%,五至十年期通膨預期由3.4%升至3.5%。調查顯示逾半數受訪者打算削減家用品、汽車、外食或旅遊支出,耐久財購買意願指標降至歷史低點。</p>
+      <p class="src">鉅亨網 · <a href="https://news.cnyes.com/news/id/6626991" target="_blank" rel="noopener">閱讀原文</a></p>
+    </article>
+    <article>
+      <span class="lab">美國</span><span class="time">10/10 01:30</span>
+      <h3>美債殖利率處20多年高檔,避險成本升至2023年銀行危機以來最高</h3>
+      <p>10年期美債殖利率升至約5.23%,自2月美伊戰爭爆發以來累計上升約135個基點;30年期升至約5.614%,較3月低點上升約110個基點。防範10年期利率交換利率3個月內大升200基點的保護成本升至132個基點,為2023年3月矽谷銀行倒閉以來最高。高盛預估大型雲端與AI業者明年發債規模可能達4,200億美元創新高,加上房貸凸性避險賣壓,可能進一步推高殖利率。</p>
+      <p class="src">鉅亨網 · <a href="https://news.cnyes.com/news/id/6627037" target="_blank" rel="noopener">閱讀原文</a></p>
+    </article>
+    <article>
+      <span class="lab">歐洲</span><span class="time">10/10 07:30</span>
+      <h3>法國10年期公債殖利率升至2002年來高點,克魯曼警告債務風險</h3>
+      <p>諾貝爾經濟學獎得主克魯曼在專欄指出,法國可能面臨潛在債務危機,規模之大恐讓歐洲央行難以出手救助。法國10年期公債殖利率近日升至2002年以來最高水位。報導指出,法國政府利息負擔攀升、預算赤字偏高,且退休年齡改革遲未推動,財政路徑難以持續;若持續偏離財政紀律,歐洲央行救助成本將極高,並可能引發歐洲內部政治分歧。</p>
+      <p class="src">鉅亨網 · <a href="https://news.cnyes.com/news/id/6627003" target="_blank" rel="noopener">閱讀原文</a></p>
+    </article>
+    <article>
+      <span class="lab">日本</span><span class="time">10/11 20:10</span>
+      <h3>日本上半財年企業破產5,373件創13年同期新高,升息與缺工夾擊</h3>
+      <p>東京商工調查顯示,日本2026財年上半年(4至9月)負債逾1,000萬日圓的企業破產達5,373件,年增3.8%,為13年同期新高;負債總額約8,561.69億日圓,年增23.5%。因人手不足破產者240家、年增17%,因人工成本上升破產者130家、年增75.6%。日本政策利率已由0.75%升至1.25%,全國約25.1萬家殭屍企業(占17.1%)利息負擔加重。</p>
+      <p class="src">鉅亨網 · <a href="https://news.cnyes.com/news/id/6627517" target="_blank" rel="noopener">閱讀原文</a></p>
+    </article>
+
+  </div>
+</section>
+
+<footer><p>富盛證券投資顧問股份有限公司 (102)金管投顧新字019 號。臺北總公司：臺北市信義區松德路171 號9 樓；(02)2728-3222。台中分公司：台中市市政北一路77 號14 樓之11；(04)2251-3477。高雄分公司：高雄市苓雅區四維四路7號 003樓3R16室。本報告所載係根據各項市場資訊加以整理匯集及研究分析，僅供參考，本公司不保證其正確性及完整性。內容如涉及有價證券或金融商品相關記載或說明，並不構成要約、招攬、宣傳、建議推薦買賣等任何形式之表示，投資人如參考本報告進行相關投資或交易，應自行承擔所有損益，本公司不負任何法律責任。非經本公司同意，不得將本報告內容之一部或全部加以複製、轉載或散佈。本文所提及之個股，僅供舉例之用，不代表本基金之必然持股，亦不代表任何金融商品之推介或建議。富盛證券投顧為M&amp;G系列基金及先機環球基金總代理【富盛證券投顧獨立經營管理】</p></footer>
+</main>
+
+<script>
+(function(){
+  var tabs=[["tab-mkt","p-mkt","mkt"],["tab-news","p-news","news"]];
+  function show(key){
+    tabs.forEach(function(t){
+      var on=t[2]===key;
+      document.getElementById(t[0]).setAttribute("aria-selected",on?"true":"false");
+      document.getElementById(t[1]).hidden=!on;
+    });
+  }
+  tabs.forEach(function(t){document.getElementById(t[0]).addEventListener("click",function(){show(t[2])})});
+  var h=(location.hash||"").replace("#","");
+  if(h==="news"||h==="mkt"){show(h)}
+})();
+</script>
+
+</body></html>
